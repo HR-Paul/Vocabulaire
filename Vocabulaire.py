@@ -58,11 +58,14 @@ def newboucle():
     essais=0
     suite=0
     suivant=True
+    if len(tableau)==0:
+        print("Aucun élément à apprendre")
+        return
     while suivant:
         if aléa:
             demande=random.choice(list(tableau.keys()))
         else:
-            demande=tuple(tableau.keys())[essais]
+            demande=tuple(tableau.keys())[essais%len(tableau)]
         precessais=essais
         points,essais,suite=devinette(points,essais,suite,demande)
         if precessais==essais:
@@ -73,10 +76,16 @@ def newboucle():
             if inpsuiv.lower()=="non":
                 suivant=False
 def add_nouveaux():
-    tableau=json.load(open(path_file_list))
+    try:
+        tableau:dict[str,dict[str,list[str]]]=json.load(open(path_file_list))
+    except (json.decoder.JSONDecodeError,FileNotFoundError):
+        tableau:dict[str,dict[str,list[str]]]={}
     with open("./nouveaux.txt") as f:
         content:list[str]=f.read().splitlines()
     if len(content)==0:
+        if tableau.get(listechoisie)==None:
+            tableau[listechoisie]={}
+        json.dump(tableau,open(path_file_list,"w"))
         return
     for i in range(len(content)):
         demande,reponse=content[i].split("=")
