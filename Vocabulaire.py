@@ -45,17 +45,36 @@ def devinette(tableau,nbrepoints,essais):
     print()
     essais+=1
     return nbrepoints,essais
-def newdevinette_alea(tableau:dict[str,list[str]],nbpoints:int,nbessais:int,demande:str=""):
-    if demande=="":
-        demande=random.choice(list(tableau.keys()))
+def devinette_alea(nbpoints:int,nbessais:int,suite:int):
+    demande=random.choice(list(tableau.keys()))
     essai=input(demande+"\n")
     if essai=="exit":
-        return tableau,essai,nbessais
+        return nbpoints,nbessais
     elif essai in tableau[demande]:
+        resultats[demande]["réussi"]+=1
+        nbpoints+=1
+        suite+=1
+        print(f"Vous avez {nbpoints} points sur {nbessais+1} ce qui vous fait un taux de {(nbpoints/(nbessais+1))*100} % de réussite !")
+        print("Bravo ! La réponse était effectivement",essai)
+        if suite>=3:
+            print("Incroyable ! Vous êtes sur une série de",suite,"bonnes réponses")
+    else:
+        resultats[demande]["raté"]+=1
+        suite=0
+        print(f"Vous avez {nbpoints} points sur {nbessais+1} ce qui vous fait un taux de {(nbpoints/(nbessais+1))*100} % de réussite !")
+        if len(tableau[demande])==0:
+            print(f"La réponse était {tableau[demande][0]}")
+        else:
+            print(f"Vous pouviez répondre {tableau[demande][0].join(", ou "+tableau[demande][i] for i in range(1,len(tableau[demande])))}")
+        rectification=""
+        while rectification not in tableau[demande]:
+            rectification=input(f"Essaye de réécrire { {True:"la réponse",False:"une des réponses"}[len(tableau[demande])==1] } :\n")
+    resultats[demande]["apparu"]+=1
+    nbessais+=1
+    return nbpoints,nbessais,suite
 
 
-
-def devinette_aléa(tableau:dict[str,list[str]],nbrepoints:int,nbreessais:int,suite:int,hasard:int=-1):
+"""def devinette_aléa(tableau:dict[str,list[str]],nbrepoints:int,nbreessais:int,suite:int,hasard:int=-1):
     if hasard==-1:
         hasard=randint(0,2*(len(tableau)-1))
     if hasard%2==0:
@@ -90,7 +109,7 @@ def devinette_aléa(tableau:dict[str,list[str]],nbrepoints:int,nbreessais:int,su
             rectification=input("Essaye de le réécrire :\n")
             if rectification=="exit":
                 return tableau,essai,nbreessais,suite,2*hasard
-    return tableau,nbrepoints,nbreessais,suite
+    return tableau,nbrepoints,nbreessais,suite"""
 def analyse_résultats(tableau):
     resultatstops=maxium(tableau,5)
     print("############################################################")
@@ -166,7 +185,7 @@ def boucle(tab):
 suite=0
 
 
-tab,resultats=get_liste(os.path.join(os.path.curdir,"listes_vocab.json"),"anglaisG25256S1")
+tableau,resultats=get_liste(os.path.join(os.path.curdir,"listes_vocab.json"),"anglaisG25256S1")
 #boucle(tab)
-newdevinette_alea(tab,0,0,"")
+newdevinette_alea(0,0)
 #boucle_aléa(tab)
