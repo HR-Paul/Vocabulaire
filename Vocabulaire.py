@@ -1,5 +1,4 @@
 import random
-#from copy import deepcopy
 from parameters import *
 import json
 
@@ -53,13 +52,6 @@ def analyse_résultats():
     for i in range(len(rates)):
         print("Le mot",rates[i],"a été râté",resultats[rates[i]]["raté"],"fois.")
 def maxium(tableau:dict[str,dict[str,int]],tops:int):
-    """
-    tableau:liste de dictionnaires contenant les mots en allemand en français, leur fréquence d'apparition de réussite et de râté
-    tops:nombre de valeur du top voulu
-    renvoi:liste de liste de dictionnaires contenant le top 'tops' des mots les plus apparus, les plus réussis et les plus échoués
-    renvoi[any]:liste de dictionnaire contenant le top des mots les plus apparus/réussis/échoués en fonction de any
-    renvoi[any][any1]:dictionnaire d'un mot allemand ou français avec ses informations
-    """
     return sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["apparu"])[:tops],sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["réussi"])[:tops],sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["raté"])[:tops]
 def newboucle():
     points=0
