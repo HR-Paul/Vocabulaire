@@ -45,8 +45,9 @@ def devinette(tableau,nbrepoints,essais):
     print()
     essais+=1
     return nbrepoints,essais
-def devinette_alea(nbpoints:int,nbessais:int,suite:int):
-    demande=random.choice(list(tableau.keys()))
+
+#demande=random.choice(list(tableau.keys()))
+def devinette(nbpoints:int,nbessais:int,suite:int,demande:str):
     essai=input(demande+"\n")
     if essai=="exit":
         return nbpoints,nbessais
@@ -65,7 +66,7 @@ def devinette_alea(nbpoints:int,nbessais:int,suite:int):
         if len(tableau[demande])==0:
             print(f"La réponse était {tableau[demande][0]}")
         else:
-            print(f"Vous pouviez répondre {tableau[demande][0].join(", ou "+tableau[demande][i] for i in range(1,len(tableau[demande])))}")
+            print(f"Vous pouviez répondre {repr(tableau[demande][0])}{"".join(", ou "+repr(tableau[demande][i]) for i in range(1,len(tableau[demande])))}")
         rectification=""
         while rectification not in tableau[demande]:
             rectification=input(f"Essaye de réécrire { {True:"la réponse",False:"une des réponses"}[len(tableau[demande])==1] } :\n")
@@ -110,19 +111,20 @@ def devinette_alea(nbpoints:int,nbessais:int,suite:int):
             if rectification=="exit":
                 return tableau,essai,nbreessais,suite,2*hasard
     return tableau,nbrepoints,nbreessais,suite"""
-def analyse_résultats(tableau):
+def analyse_résultats(tableau:dict[str,dict[str,int]]):
     resultatstops=maxium(tableau,5)
     print("############################################################")
     print("####################   LES TOPS   ##########################")
     print("############################################################")
     for i in range(len(resultatstops[0])):
-        print("Le mot",resultatstops[0][i]["terme 1"],"est apparu",resultatstops[0][i]["apparu"],"fois.")
+        print("Le mot",resultatstops[0][i],"est apparu",tableau[resultatstops[0][i]]["apparu"],"fois.")
+    print()
     for i in range(len(resultatstops[1])):
-        print("Le mot",resultatstops[1][i]["terme 1"],"a été réussi",resultatstops[1][i]["réussi"],"fois.")
+        print("Le mot",resultatstops[1][i],"a été réussi",tableau[resultatstops[1][i]]["réussi"],"fois.")
+    print()
     for i in range(len(resultatstops[2])):
-        print("Le mot",resultatstops[2][i]["terme 1"],"a été râté",resultatstops[2][i]["raté"],"fois.")
-    return
-def maxium(tableau,tops):
+        print("Le mot",resultatstops[2][i],"a été râté",tableau[resultatstops[2][i]]["raté"],"fois.")
+def maxium(tableau:dict[str,dict[str,int]],tops:int):
     """
     tableau:liste de dictionnaires contenant les mots en allemand en français, leur fréquence d'apparition de réussite et de râté
     tops:nombre de valeur du top voulu
@@ -130,8 +132,8 @@ def maxium(tableau,tops):
     renvoi[any]:liste de dictionnaire contenant le top des mots les plus apparus/réussis/échoués en fonction de any
     renvoi[any][any1]:dictionnaire d'un mot allemand ou français avec ses informations
     """
-    renvoi=[sorted(tableau,reverse=True,key=lambda dict:dict["apparu"]),sorted(tableau,reverse=True,key=lambda dict:dict["réussi"]),sorted(tableau,reverse=True,key=lambda dict:dict["raté"])]
-    for magentarugueux in range(len(tableau)-tops):
+    renvoi=[sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["apparu"]),sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["réussi"]),sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["raté"])]
+    for _ in range(len(tableau)-tops):
         del(renvoi[0][tops])
         del(renvoi[1][tops])
         del(renvoi[2][tops])
@@ -186,6 +188,7 @@ suite=0
 
 
 tableau,resultats=get_liste(os.path.join(os.path.curdir,"listes_vocab.json"),"anglaisG25256S1")
+analyse_résultats(resultats)
 #boucle(tab)
-newdevinette_alea(0,0)
+devinette(0,0,0,"compel")
 #boucle_aléa(tab)
