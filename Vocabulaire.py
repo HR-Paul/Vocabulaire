@@ -21,9 +21,9 @@ def devinette(nbpoints:int,nbessais:int,suite:int,demande:str):
         nbpoints+=1
         suite+=1
         print(f"Vous avez {nbpoints} points sur {nbessais+1} ce qui vous fait un taux de {(nbpoints/(nbessais+1))*100} % de réussite !")
-        print("Bravo ! La réponse était effectivement",essai)
+        print(f"Bravo ! La réponse était effectivement {essai}")
         if suite>=3:
-            print("Incroyable ! Vous êtes sur une série de",suite,"bonnes réponses")
+            print(f"Incroyable ! Vous êtes sur une série de {suite} bonnes réponses")
     else:
         resultats[demande]["raté"]+=1
         suite=0
@@ -44,15 +44,15 @@ def analyse_résultats():
     print("####################   LES TOPS   ##########################")
     print("############################################################")
     for i in range(len(apparus)):
-        print("Le mot",apparus[i],"est apparu",resultats[apparus[i]]["apparu"],"fois.")
+        print(f"Le mot {apparus[i]} est apparu {resultats[apparus[i]]["apparu"]} fois.")
     print()
     for i in range(len(reussis)):
-        print("Le mot",reussis[i],"a été réussi",resultats[reussis[i]]["réussi"],"fois.")
+        print(f"Le mot{ reussis[i]} a été réussi {resultats[reussis[i]]["réussi"]} fois.")
     print()
     for i in range(len(rates)):
-        print("Le mot",rates[i],"a été râté",resultats[rates[i]]["raté"],"fois.")
+        print(f"Le mot {rates[i]} a été râté {resultats[rates[i]]["raté"]} fois.")
 def maxium(tableau:dict[str,dict[str,int]],tops:int):
-    return sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["apparu"])[:tops],sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["réussi"])[:tops],sorted(tableau,reverse=True,key=lambda dict:tableau[dict]["raté"])[:tops]
+    return (sorted(tableau,reverse=True,key=lambda dict:tableau[dict][categorie])[:tops] for categorie in ["apparu","réussi","raté"])
 def newboucle():
     points=0
     essais=0
