@@ -13,7 +13,7 @@ def get_liste():
 
 
 def devinette(nbpoints:int,nbessais:int,suite:int,demande:str):
-    essai=input(demande+"\n")
+    essai=input(demande+"\n").strip()
     if essai=="exit":
         return nbpoints,nbessais,suite
     elif essai in tableau[demande]:
@@ -21,7 +21,7 @@ def devinette(nbpoints:int,nbessais:int,suite:int,demande:str):
         nbpoints+=1
         suite+=1
         print(f"Vous avez {nbpoints} points sur {nbessais+1} ce qui vous fait un taux de {(nbpoints/(nbessais+1))*100} % de réussite !")
-        print(f"Bravo ! La réponse était effectivement {essai}")
+        print(f"Bravo ! La réponse était effectivement {essai} { {True:"",False:". Vous auriez pu aussi pu répondre "+repr(tableau[demande][0])+"".join(", ou "+repr(tableau[demande][i]) for i in range(1,len(tableau[demande])))}[len(tableau[demande])==1] }")
         if suite>=3:
             print(f"Incroyable ! Vous êtes sur une série de {suite} bonnes réponses")
     else:
